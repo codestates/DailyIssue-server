@@ -1,0 +1,27 @@
+{
+  "name": "im26project13-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ehdgur3125/im26project13-server.git"
+  },
+  "keywords": [
+    "codestates",
+    "first_project"
+  ],
+  "author": "pipe piper",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ehdgur3125/im26project13-server/issues"
+  },
+  "homepage": "https://github.com/ehdgur3125/im26project13-server#readme"
+}
