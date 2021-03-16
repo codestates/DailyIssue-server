@@ -7,15 +7,9 @@ assignees: ''
 
 ---
 
-## Assigness:
-
 ## Description
 
 ## TODO
 - [ ] 1.
 - [ ] 2.
 - [ ] 3.
-
-## Estimated time
-
-## Labeling
