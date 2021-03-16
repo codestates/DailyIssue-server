@@ -1,0 +1,33 @@
+{
+  "name": "im26project13-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.5.1",
+    "sequelize-cli": "^6.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ehdgur3125/im26project13-server.git"
+  },
+  "keywords": [
+    "codestates",
+    "first_project"
+  ],
+  "author": "pipe piper",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ehdgur3125/im26project13-server/issues"
+  },
+  "homepage": "https://github.com/ehdgur3125/im26project13-server#readme"
+}
