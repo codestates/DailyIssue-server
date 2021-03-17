@@ -2,8 +2,8 @@ const express= require('express');
 const router=express.Router();
 const controller=require('../controllers/main');
 
-router.get('/',controller.main);
 router.get('/:date',controller.previousMain);
+router.get('/',controller.main);
 router.post('/vote',controller.vote);
 router.get('/comment',controller.comment.get);
 router.post('/comment',controller.comment.post);
