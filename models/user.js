@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       user.belongsToMany(models.comment,{through:models.like});
       user.hasMany(models.comment);
       user.hasMany(models.post,{foreignKey:"userId"});
+      user.belongsToMany(models.comment,{through:models.commentReport});
+      user.belongsToMany(models.post,{through:models.postReport});
     }
   };
   user.init({

@@ -1,7 +1,7 @@
 const model=require("../../models");
 
 module.exports=async function(req,res){
-  console.log(req.params.date);
+  console.log("prevMain");
   let dailyIssue, dailyIssueId;
   if(req.params.date.match(/dddd-dd-dd/)){ //날짜인지확인하는부분 자세하게구현할필요있음
     dailyIssue=await model.post.findOne({
@@ -51,8 +51,8 @@ module.exports=async function(req,res){
   res.send({
     dailyIssue,
     voted:false,
-    agree:vote.filter(x=>x.vote)[0].dataValues.count,
-    disgree:vote.filter(x=>!x.vote)[0].dataValues.count,
+    agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+    disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
     comments
   });
 }
