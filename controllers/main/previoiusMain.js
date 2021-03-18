@@ -1,21 +1,21 @@
 const model=require("../../models");
 
-module.exports=async function(req,res,next){
+module.exports=async function(req,res){
   console.log(req.params.date);
-  let hotIssue, hotIssueId;
+  let dailyIssue, dailyIssueId;
   if(req.params.date.match(/dddd-dd-dd/)){ //날짜인지확인하는부분 자세하게구현할필요있음
-    hotIssue=await model.post.findOne({
+    dailyIssue=await model.post.findOne({
       where:{
         createdAt:req.parms.date
       }
     });
   }
-  if(hotIssue){
-    hotIssueId=hotIssue.postId;
+  if(dailyIssue){
+    dailyIssueId=dailyIssue.postId;
   }
   else{
-    hotIssueId=1;
-    hotIssue=await model.post.findByPk(1);
+    dailyIssueId=1;
+    dailyIssue=await model.post.findByPk(1);
   }
   const vote=await model.vote.findAll({
     attributes:[
@@ -23,22 +23,33 @@ module.exports=async function(req,res,next){
       [model.sequelize.fn('COUNT','*'), 'count']
     ],
     where:{
-      postId:hotIssueId,
+      postId:dailyIssueId,
     },
     group:'vote'  
   });
-  const comments=await model.comment.findAll({
-    where:{
-      postId:hotIssueId
-    },
-    include:{
-      model:model.user,
-      attributes:['nickname']
-    },
-    raw:true
+  const comments=await model.like.findAll({
+    attributes:[
+      [model.sequelize.fn('COUNT','*'), 'like']
+    ],
+    include:[{
+      right:true,
+      require:false,
+      model:model.comment,
+      attributes:['id','content','createdAt'],
+      where:{
+        'postId':dailyIssueId
+      },
+      include:[{
+        model:model.user,
+        attributes:['nickname'],
+        require:false
+      }],
+    }],
+    raw:true,
+    group:'commentId',
   });
   res.send({
-    hotIssue,
+    dailyIssue,
     voted:false,
     agree:vote.filter(x=>x.vote)[0].dataValues.count,
     disgree:vote.filter(x=>!x.vote)[0].dataValues.count,

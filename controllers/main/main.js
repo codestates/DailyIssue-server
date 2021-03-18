@@ -1,32 +1,44 @@
 const model=require("../../models");
 const jwt=require('jsonwebtoken');
 
-module.exports=async function(req,res,hotIssueId){
+module.exports=async function(req,res){
+  const dailyIssueId=1;
   const auth=req.headers['authorization'];
-  const hotIssue=await model.post.findByPk(hotIssueId)
+  const dailyIssue=await model.post.findByPk(dailyIssueId)
   const vote=await model.vote.findAll({
     attributes:[
       "vote",
       [model.sequelize.fn('COUNT','*'), 'count']
     ],
     where:{
-      postId:hotIssueId,
+      postId:dailyIssueId,
     },
     group:'vote'  
   });
-  const comments=await model.comment.findAll({
-    where:{
-      postId:hotIssueId
-    },
-    include:{
-      model:model.user,
-      attributes:['nickname']
-    },
-    raw:true
+  const comments=await model.like.findAll({
+    attributes:[
+      [model.sequelize.fn('COUNT','*'), 'like']
+    ],
+    include:[{
+      right:true,
+      require:false,
+      model:model.comment,
+      attributes:['id','content','createdAt'],
+      where:{
+        'postId':dailyIssueId
+      },
+      include:[{
+        model:model.user,
+        attributes:['nickname'],
+        require:false
+      }],
+    }],
+    raw:true,
+    group:'commentId',
   });
   if(auth===undefined){
     res.send({
-      hotIssue,
+      dailyIssue,
       voted:false,
       agree:vote.filter(x=>x.vote)[0].dataValues.count,
       disgree:vote.filter(x=>!x.vote)[0].dataValues.count,
@@ -41,20 +53,20 @@ module.exports=async function(req,res,hotIssueId){
       return;
     }
     const userVoted=await model.vote.findAll({
-      postId:hotIssueId,
+      postId:dailyIssueId,
       userId:data.id
     })
     const voted=(userVoted.length>0)?true:false;
     if(voted){
       res.send({
-        ...hotIssue,
+        ...dailyIssue,
         voted,
         comments
       });
     }
     else{
       res.send({
-        ...hotIssue,
+        ...dailyIssue,
         voted
       });
     }

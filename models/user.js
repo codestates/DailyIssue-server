@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       user.belongsToMany(models.post,{through:models.vote});
       user.belongsToMany(models.comment,{through:models.like});
-      user.belongsToMany(models.post,{through:models.comment});
-      user.hasMany(models.post,{foreignKey:"userId"})
+      user.hasMany(models.comment);
+      user.hasMany(models.post,{foreignKey:"userId"});
     }
   };
   user.init({
