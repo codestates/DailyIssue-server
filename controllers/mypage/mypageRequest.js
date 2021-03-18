@@ -20,15 +20,15 @@ module.exports = async function(req, res) {
                     username: decoded.username,
                     }
                 })
-                delete userData.dataValues.hashedPw;
+                delete userData.dataValues.hashedpw;
 
-                await like.findAndCountAll({
+                like.count({
                     where: {
-                        uesrId: decoded.id,
+                        userId: decoded.id,
                     }
                 })
                 .then(result => {
-                    res.status(200).json({userData: userData.dataValues, like: result.count});
+                    res.status(200).json({userData: userData.dataValues, like: result});
                 })
             }
         })
