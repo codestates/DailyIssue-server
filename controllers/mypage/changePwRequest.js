@@ -29,7 +29,7 @@ module.exports = async function(req, res) {
                     let hashedFixPassword = await passwordHash.generate(req.body.fixPassword);
                     await user.update({hashedpw: hashedFixPassword}, {where: {hashedpw: userData.dataValues.hashedpw}});
     
-                    res.status(200).send('비밀번호 수정이 완료되었습니다.');
+                    res.status(200).json({message: '비밀번호 수정이 완료되었습니다.'});
                 }
                 else {
                     res.status(400).send('현재 비밀번호가 일치하지 않습니다.');

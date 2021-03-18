@@ -6,5 +6,6 @@ router.post('/signup', controllers.signUp);
 router.post('/login', controllers.login);
 router.get('/accTokenRequestUser', controllers.accTokenRequestUser);
 router.get('/rfTokenRequest', controllers.rfTokenRequest);
+router.post('/callbackGit', controllers.callbackGit);
 
 module.exports=router;
