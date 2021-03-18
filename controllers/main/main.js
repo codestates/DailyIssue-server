@@ -46,10 +46,10 @@ module.exports=async function(req,res){
     })
     return;
   }
-  jwt.verify(auth.split(' ')[1],process.env.ACCESS_SECRET,async(err,data)=>{
+  jwt.verify(auth.split(' ')[1],'salt',async(err,data)=>{
     if(err){
       //invalid token
-      res.status(404).send("Invalid token")
+      res.status(404).send({data:err,message:"Invalid token"});
       return;
     }
     const userVoted=await model.vote.findAll({
@@ -59,7 +59,7 @@ module.exports=async function(req,res){
     const voted=(userVoted.length>0)?true:false;
     if(voted){
       res.send({
-        ...dailyIssue,
+        dailyIssue,
         voted,
         agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
         disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
@@ -68,7 +68,7 @@ module.exports=async function(req,res){
     }
     else{
       res.send({
-        ...dailyIssue,
+        dailyIssue,
         voted
       });
     }
