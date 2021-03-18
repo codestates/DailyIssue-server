@@ -8,8 +8,9 @@ router.post('/comment',controller.comment);
 router.get('/like',controller.totalLike);
 router.post('/like',controller.postLike);
 router.get('/small',controller.small.get);
+router.get('/small/:id',controller.small.getById);
 router.post('/small',controller.small.post);
-router.post('/hotissue',controller.hotIssue);
+router.get('/hotissue',controller.hotIssue);
 router.get('/:date',controller.previousMain);
 
 module.exports=router;

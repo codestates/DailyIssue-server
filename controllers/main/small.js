@@ -2,8 +2,85 @@ const model=require("../../models");
 const jwt=require('jsonwebtoken');
 
 module.exports={
+  async getById(req,res){
+    const auth=req.headers['authorization'];
+    const smallIssue=await model.post.findByPk(req.params.id);
+    if(smallIssue===null || Object.keys(smallIssue).length===0){
+      res.status(404).send("No Such Small Issue");
+      return;
+    }
+    const smallIssueId=smallIssue.id;
+    const vote=await model.vote.findAll({
+      attributes:[
+        "vote",
+        [model.sequelize.fn('COUNT','*'), 'count']
+      ],
+      where:{
+        postId:smallIssueId,
+      },
+      group:'vote'  
+    });
+    const comments=await model.like.findAll({
+      attributes:[
+        [model.sequelize.fn('COUNT','*'), 'like']
+      ],
+      include:[{
+        right:true,
+        require:false,
+        model:model.comment,
+        attributes:['id','content','createdAt'],
+        where:{
+          'postId':smallIssueId
+        },
+        include:[{
+          model:model.user,
+          attributes:['nickname'],
+          require:false
+        }],
+      }],
+      raw:true,
+      group:'commentId',
+    });
+    if(auth===undefined){
+      res.send({
+        smallIssue,
+        voted:false,
+        agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+        disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
+        comments
+      })
+      return;
+    }
+    jwt.verify(auth.split(' ')[1],process.env.ACCESS_SECRET,async(err,data)=>{
+      if(err){
+        //invalid token
+        res.status(404).send("Invalid token")
+        return;
+      }
+      const userVoted=await model.vote.findAll({
+        postId:smallIssueId,
+        userId:data.id
+      })
+      const voted=(userVoted.length>0)?true:false;
+      if(voted){
+        res.send({
+          smallIssue,
+          voted,
+          agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+          disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
+          comments
+        });
+      }
+      else{
+        res.send({
+          smallIssue,
+          voted
+        });
+      }
+    });
+
+  },
   async get(req,res,next){
-    console.log('small ???');
     const auth=req.headers['authorization'];
     const smallIssues=await model.post.findAll({
       where:{
@@ -72,14 +149,16 @@ module.exports={
       const voted=(userVoted.length>0)?true:false;
       if(voted){
         res.send({
-          ...smallIssue,
+          smallIssue,
           voted,
+          agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+          disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
           comments
         });
       }
       else{
         res.send({
-          ...smallIssue,
+          smallIssue,
           voted
         });
       }

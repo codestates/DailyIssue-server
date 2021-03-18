@@ -40,8 +40,8 @@ module.exports=async function(req,res){
     res.send({
       dailyIssue,
       voted:false,
-      agree:vote.filter(x=>x.vote)[0].dataValues.count,
-      disgree:vote.filter(x=>!x.vote)[0].dataValues.count,
+      agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+      disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
       comments
     })
     return;
@@ -61,6 +61,8 @@ module.exports=async function(req,res){
       res.send({
         ...dailyIssue,
         voted,
+        agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+        disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
         comments
       });
     }

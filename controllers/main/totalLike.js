@@ -28,7 +28,7 @@ module.exports=function(req,res,next){
       group:'user.username'
     });
     res.send({
-      "like":likeCount[0].dataValues.count
+      "like":likeCount.length?likeCount[0].dataValues.count:0
     });
   });
 }
