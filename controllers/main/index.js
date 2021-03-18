@@ -6,10 +6,9 @@ const totalLike=require("./totalLike.js");
 const postLike=require("./postLike");
 const small=require("./small");
 
-let hotIssueId=1;
 
 module.exports={
-  main:(req,res)=>main(req,res,hotIssueId),
+  main:(req,res)=>main(req,res),
   previousMain,
   vote,
   comment,
