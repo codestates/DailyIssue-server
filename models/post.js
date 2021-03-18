@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       post.belongsToMany(models.user,{through:models.vote});
       post.hasMany(models.comment);
       post.belongsTo(models.user,{foreignKey:"userId"});
+      post.belongsToMany(models.user,{thorugh:models.postReport});
     }
   };
   post.init({

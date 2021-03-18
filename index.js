@@ -3,6 +3,8 @@ const express=require('express');
 const mainRouter=require('./routes/main');
 const authRouter=require('./routes/auth');
 const mypageRouter=require('./routes/mypage');
+const reportRouter=require('./routes/report');
+
 const app = express();
 const port = 4000;
 const cors=require('cors');
@@ -17,6 +19,7 @@ app.use(cookieParser());
 
 app.use('/main',mainRouter);
 app.use('/mypage',mypageRouter);
+app.use('/report',reportRouter);
 app.use('/',authRouter);
 
 app.listen(port,()=>{

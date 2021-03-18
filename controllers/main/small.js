@@ -3,16 +3,28 @@ const jwt=require('jsonwebtoken');
 
 module.exports={
   async get(req,res,next){
-    const dailyIssueId=1;
+    console.log('small ???');
     const auth=req.headers['authorization'];
-    const dailyIssue=await model.post.findByPk(dailyIssueId)
+    const smallIssues=await model.post.findAll({
+      where:{
+        "userId":{
+          [model.Sequelize.Op.ne]:1
+        }
+      }
+    })
+    if(smallIssues.length===0){
+      res.status(404).send("No Small Issue");
+      return;
+    }
+    const smallIssue=smallIssues[Math.floor(Math.random()*(smallIssues.length))];
+    const smallIssueId=smallIssue.id;
     const vote=await model.vote.findAll({
       attributes:[
         "vote",
         [model.sequelize.fn('COUNT','*'), 'count']
       ],
       where:{
-        postId:dailyIssueId,
+        postId:smallIssueId,
       },
       group:'vote'  
     });
@@ -26,7 +38,7 @@ module.exports={
         model:model.comment,
         attributes:['id','content','createdAt'],
         where:{
-          'postId':dailyIssueId
+          'postId':smallIssueId
         },
         include:[{
           model:model.user,
@@ -39,10 +51,10 @@ module.exports={
     });
     if(auth===undefined){
       res.send({
-        dailyIssue,
+        smallIssue,
         voted:false,
-        agree:vote.filter(x=>x.vote)[0].dataValues.count,
-        disgree:vote.filter(x=>!x.vote)[0].dataValues.count,
+        agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+        disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
         comments
       })
       return;
@@ -54,20 +66,20 @@ module.exports={
         return;
       }
       const userVoted=await model.vote.findAll({
-        postId:dailyIssueId,
+        postId:smallIssueId,
         userId:data.id
       })
       const voted=(userVoted.length>0)?true:false;
       if(voted){
         res.send({
-          ...dailyIssue,
+          ...smallIssue,
           voted,
           comments
         });
       }
       else{
         res.send({
-          ...dailyIssue,
+          ...smallIssue,
           voted
         });
       }

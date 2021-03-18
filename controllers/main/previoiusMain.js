@@ -1,7 +1,6 @@
 const model=require("../../models");
 
 module.exports=async function(req,res){
-  console.log(req.params.date);
   let dailyIssue, dailyIssueId;
   if(req.params.date.match(/dddd-dd-dd/)){ //날짜인지확인하는부분 자세하게구현할필요있음
     dailyIssue=await model.post.findOne({
