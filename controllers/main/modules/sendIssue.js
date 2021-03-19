@@ -23,7 +23,7 @@ module.exports=async function(req,res,issue,prev=false){
             text:x["comment.content"],
             like:x.like,
             createdAt:x.createdAt||'null',
-            agree:true
+            agree:x['comment.user.votes.vote']?true:false
           }
         })
         :undefined

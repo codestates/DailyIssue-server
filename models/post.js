@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       post.hasMany(models.hotPost);
-      post.belongsToMany(models.user,{through:models.vote});
+      post.hasMany(models.vote);
       post.hasMany(models.comment);
       post.belongsTo(models.user,{foreignKey:"userId"});
       post.belongsToMany(models.user,{through:models.postReport});
