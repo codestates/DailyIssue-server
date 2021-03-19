@@ -45,7 +45,7 @@ module.exports={
       res.send({
         postId:smallIssue.id,
         title:smallIssue.title,
-        voted:false,
+        voted:0,
       })
       return;
     }
@@ -61,12 +61,11 @@ module.exports={
           userId:data.id
         }
       })
-      const voted=(userVoted.length>0)?true:false;
       if(voted){
         res.send({
           postId:smallIssue.id,
           title:smallIssue.title,
-          voted:false,
+          voted:(userVoted.length>0)? (userVoted[0].vote? 2:1):0,
           agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
           disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
           comments:comments.map(x=>{
@@ -84,7 +83,7 @@ module.exports={
         res.send({
           postId:smallIssue.id,
           title:smallIssue.title,
-          voted:false
+          voted:0
         });
       }
     });
@@ -140,7 +139,7 @@ module.exports={
       res.send({
         postId:smallIssue.id,
         title:smallIssue.title,
-        voted:false
+        voted:0
       })
       return;
     }
@@ -156,12 +155,11 @@ module.exports={
           userId:data.id
         }
       })
-      const voted=(userVoted.length>0)?true:false;
       if(voted){
         res.send({
           postId:smallIssue.id,
           title:smallIssue.title,
-          voted:false,
+          voted:(userVoted.length>0)? (userVoted[0].vote? 2:1):0,
           agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
           disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
           comments:comments.map(x=>{
@@ -179,7 +177,7 @@ module.exports={
         res.send({
           postId:smallIssue.id,
           title:smallIssue.title,
-          voted:false
+          voted:0
         });
       }
     });
