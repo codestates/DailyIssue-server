@@ -1,7 +1,8 @@
 const model=require("../../../models");
 const jwt=require('jsonwebtoken');
 
-module.exports=async function(res,issue,auth,prev=false){
+module.exports=async function(req,res,issue,prev=false){
+  const auth=req.headers['authorization'];
   const vote=await model.vote.findAll({
     attributes:[
       "vote",

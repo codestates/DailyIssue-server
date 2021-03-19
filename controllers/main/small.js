@@ -4,16 +4,14 @@ const sendIssue = require("./modules/sendIssue");
 
 module.exports={
   async getById(req,res){
-    const auth=req.headers['authorization'];
     const smallIssue=await model.post.findByPk(req.params.id);
     if(smallIssue===null || Object.keys(smallIssue).length===0){
       res.status(404).send("No Such Small Issue");
       return;
     }
-    sendIssue(res,smalIssue,auth);
+    sendIssue(req,res,smallIssue);
   },
-  async get(req,res,next){
-    const auth=req.headers['authorization'];
+  async get(req,res){
     const smallIssues=await model.post.findAll({
       where:{
         "userId":{
@@ -26,7 +24,7 @@ module.exports={
       return;
     }
     const smallIssue=smallIssues[Math.floor(Math.random()*(smallIssues.length))];
-    sendIssue(res,smallIssue,auth);
+    sendIssue(req,res,smallIssue);
   },
   post(req,res,next){
     const auth=req.headers['authorization'];
