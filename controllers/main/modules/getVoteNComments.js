@@ -26,12 +26,20 @@ module.exports=(issue)=>{
       include:[{
         model:model.user,
         attributes:['nickname'],
-        require:false
+        require:false,
+        include:[{
+          model:model.vote,
+          attributes:['vote'],
+          where:{
+            'postId':issue.id
+          }
+        }]
       }],
     }],
     raw:true,
     group:'commentId',
   });
+
   return {
     vote,
     comments
