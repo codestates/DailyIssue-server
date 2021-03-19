@@ -1,8 +1,8 @@
 const model=require("../../models");
+const sendIssue = require("./modules/sendIssue");
 
 module.exports=async function(req,res){
-  console.log("prevMain");
-  let dailyIssue, dailyIssueId;
+  let dailyIssue;
   if(req.params.date.match(/dddd-dd-dd/)){ //날짜인지확인하는부분 자세하게구현할필요있음
     dailyIssue=await model.post.findOne({
       where:{
@@ -15,51 +15,7 @@ module.exports=async function(req,res){
     dailyIssueId=dailyIssue.postId;
   }
   else{
-    dailyIssueId=1;
     dailyIssue=await model.post.findByPk(1);
   }
-  const vote=await model.vote.findAll({
-    attributes:[
-      "vote",
-      [model.sequelize.fn('COUNT','*'), 'count']
-    ],
-    where:{
-      postId:dailyIssueId,
-    },
-    group:'vote'  
-  });
-  const comments=await model.like.findAll({
-    attributes:[
-      [model.sequelize.fn('COUNT','*'), 'like']
-    ],
-    include:[{
-      right:true,
-      require:false,
-      model:model.comment,
-      attributes:['id','content','createdAt'],
-      where:{
-        'postId':dailyIssueId
-      },
-      include:[{
-        model:model.user,
-        attributes:['nickname'],
-        require:false
-      }],
-    }],
-    raw:true,
-    group:'commentId',
-  });
-  const userVoted=await model.vote.findAll({
-    where:{
-      postId:dailyIssueId,
-      userId:data.id
-    }
-  });
-  res.send({
-    dailyIssue,
-    voted:(userVoted.length>0)? (userVoted[0].vote? 2:1):0,
-    agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
-    disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
-    comments
-  });
+  sendIssue(res,dailyIssue,auth,true);
 }
