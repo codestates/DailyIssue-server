@@ -1,39 +1,10 @@
 const model=require("../../../models");
 const jwt=require('jsonwebtoken');
+const getVoteNComments = require("./getVoteNComments");
 
 module.exports=async function(req,res,issue,prev=false){
   const auth=req.headers['authorization'];
-  const vote=await model.vote.findAll({
-    attributes:[
-      "vote",
-      [model.sequelize.fn('COUNT','*'), 'count']
-    ],
-    where:{
-      postId:issue.id,
-    },
-    group:'vote'  
-  });
-  const comments=await model.like.findAll({
-    attributes:[
-      [model.sequelize.fn('COUNT','*'), 'like']
-    ],
-    include:[{
-      right:true,
-      require:false,
-      model:model.comment,
-      attributes:['id','content','createdAt'],
-      where:{
-        'postId':issue.id
-      },
-      include:[{
-        model:model.user,
-        attributes:['nickname'],
-        require:false
-      }],
-    }],
-    raw:true,
-    group:'commentId',
-  });
+  let vote,comments;
   const send=function(voted){
     res.send({
       postId:issue.id,
@@ -57,7 +28,13 @@ module.exports=async function(req,res,issue,prev=false){
         })
         :undefined
     });
-  };
+  }; 
+
+  if(prev){
+    const tmp=getVoteNComments(issue);
+    vote=await tmp.vote;
+    comments=await tmp.comments;
+  }
   if(auth===undefined){
     send(0);
     return;
@@ -75,7 +52,12 @@ module.exports=async function(req,res,issue,prev=false){
       }
     })
     if(userVoted.length>0){
-      send((userVoted.length>0)?userVoted[0].vote:0);
+      if(!prev){
+        const tmp=getVoteNComments(issue);
+        vote=tmp.vote;
+        comments=tmp.comments;
+      }
+      send(userVoted[0].vote);
     }
     else{
       send(0);
