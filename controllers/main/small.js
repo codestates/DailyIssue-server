@@ -43,11 +43,9 @@ module.exports={
     });
     if(auth===undefined){
       res.send({
-        smallIssue,
+        postId:smallIssue.id,
+        title:smallIssue.title,
         voted:false,
-        agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
-        disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
-        comments
       })
       return;
     }
@@ -58,23 +56,35 @@ module.exports={
         return;
       }
       const userVoted=await model.vote.findAll({
-        postId:smallIssueId,
-        userId:data.id
+        where:{
+          postId:smallIssueId,
+          userId:data.id
+        }
       })
       const voted=(userVoted.length>0)?true:false;
       if(voted){
         res.send({
-          smallIssue,
-          voted,
+          postId:smallIssue.id,
+          title:smallIssue.title,
+          voted:false,
           agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
           disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
-          comments
+          comments:comments.map(x=>{
+            return {
+              commentId:x["comment.id"],
+              text:x["comment.content"],
+              like:x.like,
+              createdAt:x.createdAt||'null',
+              agree:true
+            }
+          })
         });
       }
       else{
         res.send({
-          smallIssue,
-          voted
+          postId:smallIssue.id,
+          title:smallIssue.title,
+          voted:false
         });
       }
     });
@@ -128,11 +138,9 @@ module.exports={
     });
     if(auth===undefined){
       res.send({
-        smallIssue,
-        voted:false,
-        agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
-        disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
-        comments
+        postId:smallIssue.id,
+        title:smallIssue.title,
+        voted:false
       })
       return;
     }
@@ -143,23 +151,35 @@ module.exports={
         return;
       }
       const userVoted=await model.vote.findAll({
-        postId:smallIssueId,
-        userId:data.id
+        where:{
+          postId:smallIssueId,
+          userId:data.id
+        }
       })
       const voted=(userVoted.length>0)?true:false;
       if(voted){
         res.send({
-          smallIssue,
-          voted,
+          postId:smallIssue.id,
+          title:smallIssue.title,
+          voted:false,
           agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
           disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
-          comments
+          comments:comments.map(x=>{
+            return {
+              commentId:x["comment.id"],
+              text:x["comment.content"],
+              like:x.like,
+              createdAt:x.createdAt||'null',
+              agree:true
+            }
+          })
         });
       }
       else{
         res.send({
-          smallIssue,
-          voted
+          postId:smallIssue.id,
+          title:smallIssue.title,
+          voted:false
         });
       }
     });

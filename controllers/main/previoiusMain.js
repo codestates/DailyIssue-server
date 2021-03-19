@@ -6,7 +6,8 @@ module.exports=async function(req,res){
   if(req.params.date.match(/dddd-dd-dd/)){ //날짜인지확인하는부분 자세하게구현할필요있음
     dailyIssue=await model.post.findOne({
       where:{
-        createdAt:req.parms.date
+        createdAt:req.parms.date,
+        userId:1
       }
     });
   }

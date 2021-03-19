@@ -13,7 +13,7 @@ module.exports={
       if(err){
         res.status(400).send('Invalid authorization');
       }
-      await model.postReport.create({reportBy:data.id,postId:req.body.postId,text:req.body.text,createdAt:new Date()});
+      await model.postReport.create({reportBy:data.id,postId:req.body.postId,text:req.body.title,createdAt:new Date()});
       res.send("success!");
     });
   },

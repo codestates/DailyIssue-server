@@ -38,11 +38,9 @@ module.exports=async function(req,res){
   });
   if(auth===undefined){
     res.send({
-      dailyIssue,
-      voted:false,
-      agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
-      disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
-      comments
+      postId:dailyIssue.id,
+      title:dailyIssue.title,
+      voted:false
     })
     return;
   }
@@ -53,23 +51,35 @@ module.exports=async function(req,res){
       return;
     }
     const userVoted=await model.vote.findAll({
-      postId:dailyIssueId,
-      userId:data.id
+      where:{
+        postId:dailyIssueId,
+        userId:data.id
+      }
     })
     const voted=(userVoted.length>0)?true:false;
     if(voted){
       res.send({
-        dailyIssue,
-        voted,
+        postId:dailyIssue.id,
+        title:dailyIssue.title,
+        voted:false,
         agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
         disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
-        comments
+        comments:comments.map(x=>{
+          return {
+            commentId:x["comment.id"],
+            text:x["comment.content"],
+            like:x.like,
+            createdAt:x.createdAt||'null',
+            agree:true
+          }
+        })
       });
     }
     else{
       res.send({
-        dailyIssue,
-        voted
+        postId:dailyIssue.id,
+        title:dailyIssue.title,
+        voted:false,
       });
     }
   });

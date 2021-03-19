@@ -2,7 +2,6 @@ const model=require("../../models");
 const jwt=require('jsonwebtoken');
 
 module.exports=async function(req,res){
-  const auth=req.headers['authorization'];
   const smallIssues=await model.vote.findAll({
     attributes:[
       [model.Sequelize.fn('COUNT','*'),'cnt']
@@ -23,6 +22,11 @@ module.exports=async function(req,res){
     limit:3
   });
   res.send({
-    smallIssues
+    hotIssues:smallIssues.map(x=>{
+      return {
+        postId:x.dataValues['post.id'],
+        title:x.dataValues['post.title']
+      }
+    })
   });
 };
