@@ -7,7 +7,7 @@ module.exports=function(req,res,next){
     res.status(400).send('Not authorized');
     return;
   }
-  jwt.verify(auth.split(' ')[1],process.env.ACCESS_SECRET,async(err,data)=>{
+  jwt.verify(auth.split(' ')[1],'salt',async(err,data)=>{
     if(err){
       res.status(400).send('Invalid authorization');
     }
