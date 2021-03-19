@@ -49,9 +49,15 @@ module.exports=async function(req,res){
     raw:true,
     group:'commentId',
   });
+  const userVoted=await model.vote.findAll({
+    where:{
+      postId:dailyIssueId,
+      userId:data.id
+    }
+  });
   res.send({
     dailyIssue,
-    voted:false,
+    voted:(userVoted.length>0)? (userVoted[0].vote? 2:1):0,
     agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
     disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
     comments
