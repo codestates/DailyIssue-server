@@ -8,6 +8,6 @@ router.get('/accTokenRequestUser', controllers.accTokenRequestUser);
 router.get('/rfTokenRequest', controllers.rfTokenRequest);
 router.post('/callbackGit', controllers.callbackGit);
 router.get('/callback', controllers.callback);
-router.get('/callbackRf', controllers.callbackRf);
+router.post('/callbackRf', controllers.callbackRf);
 
 module.exports=router;
