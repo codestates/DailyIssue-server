@@ -39,7 +39,7 @@ module.exports=async function(req,res,issue,prev=false){
     send(0);
     return;
   }
-  jwt.verify(auth.split(' ')[1],'salt',async(err,data)=>{
+  jwt.verify(auth.split(' ')[1],process.env.ACCESS_SECRET,async(err,data)=>{
     if(err){
       //invalid token
       res.status(404).send("Invalid token")
