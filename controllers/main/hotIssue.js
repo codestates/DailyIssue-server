@@ -12,7 +12,7 @@ module.exports=async function(req,res,date){
       dateObj=new Date(date);
     }
     catch(e){
-      res.status(400).send(`${req.params.date}is not date`);
+      res.status(400).send(`${date}is not date`);
       return;
     }
   }

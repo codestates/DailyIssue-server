@@ -2,13 +2,20 @@ const model=require("../../models");
 const sendIssue = require("./modules/sendIssue");
 
 module.exports=async function(req,res){
-  if(!/^\d{4}\-\d{2}\-\d{2}$/.test(req.params.date)){ //날짜인지확인하는부분 자세하게구현할필요있음
+  let dateObj;
+  try{
+    dateObj=new Date(req.params.date);
+  }
+  catch(e){
     res.status(400).send(`${req.params.date}is not date`);
     return;
   }
+  const nextDateObj=new Date(dateObj.getTime()+(24*60*60*1000));
   const dailyIssue=await model.post.findOne({
     where:{
-      createdAt:req.params.date,
+      createdAt:{
+        [model.Sequelize.Op.in]:[dateObj,nextDateObj]
+      },
       userId:1
     }
   });
