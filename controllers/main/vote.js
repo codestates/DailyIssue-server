@@ -11,7 +11,15 @@ module.exports=function(req,res,next){
     if(err){
       res.status(400).send('Invalid authorization');
     }
-    await model.vote.findOrCreate({userId:data.id,postId:req.body.postId,vote:req.body.vote,createdAt:new Date()});
+    await model.vote.findOrCreate({
+      where:{
+        userId:data.id,
+        postId:req.body.postId
+      },
+      defaults:{
+        vote:req.body.vote
+      }
+    });
     const userVoted=await model.vote.findOne({
       where:{
         postId:issueId,

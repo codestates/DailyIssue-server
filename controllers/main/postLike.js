@@ -11,7 +11,12 @@ module.exports=function(req,res,next){
     if(err){
       res.status(400).send('Invalid authorization');
     }
-    await model.like.findOrCreate({userId:data.id,commentId:req.body.commentId,createdAt:new Date()});
+    await model.like.findOrCreate({{
+      where:{
+        userId:data.id,
+        commentId:req.body.postId
+      }
+    });
     const userVoted=await model.vote.findOne({
       where:{
         postId:issueId,
