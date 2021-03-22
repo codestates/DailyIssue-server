@@ -19,8 +19,9 @@ module.exports=function(req,res,next){
         userId:data.id
       }
     });
-    const {vote,comments}=await getVoteNComments(postId);
-    console.log(vote);
+    const tmp=getVoteNComments(postId);
+    const vote=await tmp.vote;
+    const comments=await tmp.comments;
     res.send({
       voted:userVoted.vote,
       agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),

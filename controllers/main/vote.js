@@ -12,6 +12,7 @@ module.exports=function(req,res,next){
   jwt.verify(auth.split(' ')[1],process.env.ACCESS_SECRET,async(err,data)=>{
     if(err){
       res.status(400).send('Invalid authorization');
+      return;
     }
     await model.vote.findOrCreate({
       where:{
@@ -28,7 +29,6 @@ module.exports=function(req,res,next){
         userId:data.id
       }
     });
-    console.log(postId);
     const tmp=getVoteNComments(postId);
     const vote=await tmp.vote;
     const comments=await tmp.comments;
