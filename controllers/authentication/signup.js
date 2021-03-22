@@ -10,15 +10,23 @@ module.exports = async function(req, res) {
         res.status(400).send('데이터 개수가 모자랍니다.');
     } 
     else {
-        const checkData = await user.findOne({
+        const checkEmail = await user.findOne({
             where: {
-                username: req.body.username,
-                nickname: req.body.nickname,
                 email: req.body.email,
             }
         })
+        const checkUserName = await user.findOne({
+            where: {
+                username: req.body.username,
+            }
+        })
+        const checkNickName = await user.findOne({
+            where: {
+                nickname: req.body.nickname,
+            }
+        })
         // 중복 존재할 때,
-        if (checkData) {
+        if (checkEmail || checkUserName || checkNickName) {
             res.status(409).send('이미 가입한 아이디/닉네임 회원입니다.');
         }
         else {
