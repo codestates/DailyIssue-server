@@ -23,6 +23,8 @@ module.exports=async function(req,res){
     sendIssue(req,res,dailyIssue,true);
     return;
   }
-  const defaultDailyIssue=await model.post.findByPk(1);
-  sendIssue(req,res,defaultDailyIssue);
+  res.status(404).send('no issue');
+  return;
+  //const defaultDailyIssue=await model.post.findByPk(1);
+  //sendIssue(req,res,defaultDailyIssue);
 }
