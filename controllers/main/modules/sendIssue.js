@@ -13,7 +13,7 @@ module.exports=async function(req,res,issue,prev=false){
       agree:(prev||voted>0)
         ?vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0)
         :undefined,
-      disgree:(prev||voted>0)
+      disagree:(prev||voted>0)
         ?vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0)
         :undefined,
       comments:(prev||voted>0)
