@@ -17,6 +17,11 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
+app.options(cors({
+    origin: false,
+    method:['GET','POST','OPTION'],
+    credentials:true
+}));
 app.use('/main',mainRouter);
 app.use('/mypage',mypageRouter);
 app.use('/report',reportRouter);
