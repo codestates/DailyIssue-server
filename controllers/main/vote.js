@@ -1,8 +1,10 @@
 const model=require("../../models");
 const jwt=require('jsonwebtoken');
+const getVoteNComments = require("./modules/getVoteNComments");
 
 module.exports=function(req,res,next){
   const auth=req.headers['authorization'];
+  const postId=req.body.postId;
   if(auth===undefined){
     res.status(400).send('Not authorized');
     return;
@@ -10,11 +12,12 @@ module.exports=function(req,res,next){
   jwt.verify(auth.split(' ')[1],process.env.ACCESS_SECRET,async(err,data)=>{
     if(err){
       res.status(400).send('Invalid authorization');
+      return;
     }
     await model.vote.findOrCreate({
       where:{
         userId:data.id,
-        postId:req.body.postId
+        postId:postId
       },
       defaults:{
         vote:req.body.vote
@@ -22,11 +25,13 @@ module.exports=function(req,res,next){
     });
     const userVoted=await model.vote.findOne({
       where:{
-        postId:issueId,
+        postId:postId,
         userId:data.id
       }
     });
-    const {vote,comments}=getVoteNComments(postId);
+    const tmp=getVoteNComments(postId);
+    const vote=await tmp.vote;
+    const comments=await tmp.comments;
     res.send({
       voted:userVoted.vote,
       agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
