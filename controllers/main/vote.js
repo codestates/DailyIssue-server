@@ -35,7 +35,7 @@ module.exports=function(req,res,next){
     res.send({
       voted:userVoted.vote,
       agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
-      disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
+      disagree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
       comments:comments.map(x=>{
         return {
           commentId:x["comment.id"],
