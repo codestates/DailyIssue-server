@@ -9,7 +9,7 @@ module.exports={
       res.status(404).send("No Such Small Issue");
       return;
     }
-    sendIssue(req,res,smallIssue.id);
+    sendIssue(req,res,smallIssue);
   },
   async get(req,res){
     const smallIssues=await model.post.findAll({
@@ -24,7 +24,7 @@ module.exports={
       return;
     }
     const smallIssue=smallIssues[Math.floor(Math.random()*(smallIssues.length))];
-    sendIssue(req,res,smallIssue.id);
+    sendIssue(req,res,smallIssue);
   },
   post(req,res,next){
     const auth=req.headers['authorization'];
