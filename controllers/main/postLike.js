@@ -11,7 +11,7 @@ module.exports=function(req,res,next){
     if(err){
       res.status(400).send('Invalid authorization');
     }
-    await model.like.findOrCreate({{
+    await model.like.findOrCreate({
       where:{
         userId:data.id,
         commentId:req.body.postId
