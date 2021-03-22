@@ -11,7 +11,7 @@ const cors=require('cors');
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
-    origin: "*",
+    origin: false,
     method:['GET','POST','OPTION'],
     credentials:true
 }));
