@@ -23,17 +23,11 @@ module.exports=function(req,res,next){
         vote:req.body.vote
       }
     });
-    const userVoted=await model.vote.findOne({
-      where:{
-        postId:postId,
-        userId:data.id
-      }
-    });
     const tmp=getVoteNComments(postId);
     const vote=await tmp.vote;
     const comments=await tmp.comments;
     res.send({
-      voted:userVoted.vote,
+      voted:req.body.vote,
       agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
       disagree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
       comments:comments.map(x=>{
