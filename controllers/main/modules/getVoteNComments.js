@@ -7,7 +7,7 @@ module.exports=(issueId)=>{
       [model.sequelize.fn('COUNT','*'), 'count']
     ],
     where:{
-      postId:issueId,
+      'postId':issueId,
     },
     group:'vote'  
   });

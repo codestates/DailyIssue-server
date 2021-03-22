@@ -42,7 +42,8 @@ module.exports=async function(req,res,date){
     hotIssues:smallIssues.map(x=>{
       return{
         postId:x.post.id,
-        title:x.post.title
+        title:x.post.title,
+        createdAt:x.post.createdAt
       }
     })
   });

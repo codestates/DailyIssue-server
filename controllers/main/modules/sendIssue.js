@@ -29,9 +29,8 @@ module.exports=async function(req,res,issue,prev=false){
         :undefined
     });
   }; 
-
   if(prev){
-    const tmp=getVoteNComments(issueId);
+    const tmp=getVoteNComments(issue.id);
     vote=await tmp.vote;
     comments=await tmp.comments;
   }
@@ -47,13 +46,13 @@ module.exports=async function(req,res,issue,prev=false){
     }
     const userVoted=await model.vote.findAll({
       where:{
-        postId:issueId,
+        postId:issue.id,
         userId:data.id
       }
     })
     if(userVoted.length>0){
       if(!prev){
-        const tmp=getVoteNComments(issueId);
+        const tmp=getVoteNComments(issue.id);
         vote=tmp.vote;
         comments=tmp.comments;
       }
