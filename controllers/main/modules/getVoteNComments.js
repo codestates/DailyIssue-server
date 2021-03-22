@@ -1,13 +1,13 @@
 const model=require("../../../models");
 
-module.exports=(issue)=>{
+module.exports=(issueId)=>{
   const vote=model.vote.findAll({
     attributes:[
       "vote",
       [model.sequelize.fn('COUNT','*'), 'count']
     ],
     where:{
-      postId:issue.id,
+      postId:issueId,
     },
     group:'vote'  
   });
@@ -21,7 +21,7 @@ module.exports=(issue)=>{
       model:model.comment,
       attributes:['id','content','createdAt'],
       where:{
-        'postId':issue.id
+        'postId':issueId
       },
       include:[{
         model:model.user,
@@ -31,7 +31,7 @@ module.exports=(issue)=>{
           model:model.vote,
           attributes:['vote'],
           where:{
-            'postId':issue.id
+            'postId':issueId
           }
         }]
       }],

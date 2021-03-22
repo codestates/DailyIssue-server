@@ -5,7 +5,7 @@ module.exports=async function(req,res,date){
   let dateObj;
   if(!date){
     const tmp=new Date();
-    dateObj=`${tmp.getFullYear()}-${tmp.getMonth()}-${tmp.getDate()}`;
+    dateObj=new Date(`${tmp.getFullYear()}-${tmp.getMonth()}-${tmp.getDate()}`);
   }
   else{
     try{
@@ -31,9 +31,8 @@ module.exports=async function(req,res,date){
           [model.Sequelize.Op.in]:[dateObj,nextDateObj]
         }
       },
-      right:true,
-      required:false,
-      attributes:['title','id']
+      required:true,
+      attributes:['title','id',"userId"]
     },
     group:'post.id',
     order:[[model.Sequelize.literal('cnt'),'desc']],
@@ -41,9 +40,9 @@ module.exports=async function(req,res,date){
   });
   res.send({
     hotIssues:smallIssues.map(x=>{
-      return {
-        postId:x.dataValues['post.id'],
-        title:x.dataValues['post.title']
+      return{
+        postId:x.post.id,
+        title:x.post.title
       }
     })
   });

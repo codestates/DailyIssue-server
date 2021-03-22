@@ -31,7 +31,7 @@ module.exports=async function(req,res,issue,prev=false){
   }; 
 
   if(prev){
-    const tmp=getVoteNComments(issue);
+    const tmp=getVoteNComments(issueId);
     vote=await tmp.vote;
     comments=await tmp.comments;
   }
@@ -53,7 +53,7 @@ module.exports=async function(req,res,issue,prev=false){
     })
     if(userVoted.length>0){
       if(!prev){
-        const tmp=getVoteNComments(issue);
+        const tmp=getVoteNComments(issueId);
         vote=tmp.vote;
         comments=tmp.comments;
       }
