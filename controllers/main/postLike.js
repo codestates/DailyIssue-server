@@ -11,7 +11,27 @@ module.exports=function(req,res,next){
     if(err){
       res.status(400).send('Invalid authorization');
     }
-    await model.like.create({userId:data.id,commentId:req.body.commentId,createdAt:new Date()});
-    res.send("success!");
+    await model.like.findOrCreate({userId:data.id,commentId:req.body.commentId,createdAt:new Date()});
+    const userVoted=await model.vote.findOne({
+      where:{
+        postId:issueId,
+        userId:data.id
+      }
+    });
+    const {vote,comments}=getVoteNComments(postId);
+    res.send({
+      voted:userVoted.vote,
+      agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
+      disgree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
+      comments:comments.map(x=>{
+        return {
+          commentId:x["comment.id"],
+          text:x["comment.content"],
+          like:x.like,
+          createdAt:x.createdAt||'null',
+          agree:x['comment.user.votes.vote']?true:false
+        }
+      })
+    });
   });
 };
