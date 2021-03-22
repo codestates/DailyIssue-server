@@ -53,8 +53,8 @@ module.exports=async function(req,res,issue,prev=false){
     if(userVoted.length>0){
       if(!prev){
         const tmp=getVoteNComments(issue.id);
-        vote=tmp.vote;
-        comments=tmp.comments;
+        vote=await tmp.vote;
+        comments=await tmp.comments;
       }
       send(userVoted[0].vote);
     }
