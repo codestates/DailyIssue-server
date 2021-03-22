@@ -31,7 +31,7 @@ module.exports=async function(req,res,issue,prev=false){
   }; 
 
   if(prev){
-    const tmp=getVoteNComments(issueId);
+    const tmp=getVoteNComments(issue.Id);
     vote=await tmp.vote;
     comments=await tmp.comments;
   }
@@ -47,7 +47,7 @@ module.exports=async function(req,res,issue,prev=false){
     }
     const userVoted=await model.vote.findAll({
       where:{
-        postId:issueId,
+        postId:issue.id,
         userId:data.id
       }
     })

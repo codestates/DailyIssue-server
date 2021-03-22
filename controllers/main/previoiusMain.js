@@ -24,5 +24,5 @@ module.exports=async function(req,res){
     return;
   }
   const defaultDailyIssue=await model.post.findByPk(1);
-  sendIssue(req,res,defaultDailyIssue,true);
+  sendIssue(req,res,defaultDailyIssue);
 }
