@@ -38,7 +38,7 @@ module.exports=(issueId)=>{
     },
     raw:true,
     group:'comment.id',
-    order:[[comment.id,"ASC"]]
+    order:[[model.Sequelize.literal('comment.id'),"ASC"]]
   });
 
   return {
