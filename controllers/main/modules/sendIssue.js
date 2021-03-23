@@ -56,7 +56,7 @@ module.exports=async function(req,res,issue,prev=false){
         vote=await tmp.vote;
         comments=await tmp.comments;
       }
-      send(userVoted[0].vote);
+      send(true);
     }
     else{
       send(0);
