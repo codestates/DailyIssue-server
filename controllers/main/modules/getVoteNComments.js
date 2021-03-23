@@ -16,8 +16,6 @@ module.exports=(issueId)=>{
       [model.sequelize.fn('COUNT','*'), 'like']
     ],
     include:[{
-      right:true,
-      require:false,
       model:model.comment,
       attributes:['id','content','createdAt'],
       where:{
@@ -26,15 +24,17 @@ module.exports=(issueId)=>{
       include:[{
         model:model.user,
         attributes:['nickname'],
-        require:false,
         include:[{
           model:model.vote,
           attributes:['vote'],
           where:{
             'postId':issueId
           }
-        }]
+        }],
+        required:true
       }],
+      required:false,
+      right:true,
     }],
     raw:true,
     group:'commentId',
