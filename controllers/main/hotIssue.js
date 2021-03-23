@@ -29,7 +29,7 @@ module.exports=async function(req,res,date){
       [model.Sequelize.Op.and]:[
         model.Sequelize.where(model.Sequelize.fn("DATE",model.Sequelize.col('post.createdAt')),date),
         {
-          userId:{
+          "$post.userId$":{
             [model.Sequelize.Op.ne]:1
           }
         }
