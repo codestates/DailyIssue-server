@@ -37,7 +37,7 @@ module.exports=function(req,res,next){
           commentId:x["comment.id"],
           text:x["comment.content"],
           like:x.like,
-          createdAt:x.createdAt||'null',
+          createdAt:x["comment.createdAt"]||'null',
           agree:x['comment.user.votes.vote']?true:false
         }
       })
