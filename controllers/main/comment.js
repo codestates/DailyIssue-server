@@ -23,7 +23,7 @@ module.exports=function(req,res,next){
     const vote=await tmp.vote;
     const comments=await tmp.comments;
     res.send({
-      voted:userVoted.vote,
+      voted:(userVoted.vote!==undefined),
       agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
       disagree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
       comments:comments.map(x=>{
