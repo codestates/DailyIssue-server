@@ -27,7 +27,6 @@ module.exports=function(req,res,next){
       agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
       disagree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
       comments:comments.map(x=>{
-        console.log(x.createdAt);
         return {
           commentId:x["comment.id"],
           text:x["comment.content"],
