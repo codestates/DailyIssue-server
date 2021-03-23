@@ -20,21 +20,21 @@ module.exports=async function(req,res,date){
   console.log(dateObj, nextDateObj);
   const smallIssues=await model.vote.findAll({
     attributes:[
-      [model.Sequelize.fn('COUNT','*'),'cnt']
+      [model.Sequelize.fn('COUNT',model.Sequelize.col('vote')),'cnt']
     ],    
     include:{
       model:model.post,
-      where:{
-        "userId":{
-          [model.Sequelize.Op.ne]:1
-        },
-        "createdAt":{
-          [model.Sequelize.Op.in]:[dateObj,nextDateObj]
-        }
-      },
       required:false,
       right:true,
       attributes:['title','id',"userId"]
+    },
+    where:{
+      "$post.userId$":{
+        [model.Sequelize.Op.ne]:1
+      },
+      "$post.createdAt$":{
+        [model.Sequelize.Op.in]:[dateObj,nextDateObj]
+      }
     },
     group:'post.id',
     order:[[model.Sequelize.literal('cnt'),'desc'],[model.Sequelize.literal('post.id'),'desc']],
@@ -42,6 +42,7 @@ module.exports=async function(req,res,date){
   });
   res.send({
     hotIssues:smallIssues.map(x=>{
+      console.log(x.dataValues);
       return{
         postId:x.post.id,
         title:x.post.title,
