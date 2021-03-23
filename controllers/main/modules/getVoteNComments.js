@@ -38,6 +38,7 @@ module.exports=(issueId)=>{
     },
     raw:true,
     group:'comment.id',
+    order:[[comment.id,"ASC"]]
   });
 
   return {
