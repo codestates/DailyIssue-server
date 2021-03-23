@@ -25,7 +25,16 @@ module.exports=async function(req,res,date){
       right:true,
       attributes:['title','id',"userId"]
     },
-    where:model.Sequelize.where(model.Sequelize.fn("DATE",model.Sequelize.col('post.createdAt')),date),
+    where:{
+      [model.Sequelize.Op.and]:[
+        model.Sequelize.where(model.Sequelize.fn("DATE",model.Sequelize.col('post.createdAt')),date),
+        {
+          userId:{
+            [model.Sequelize.Op.ne]:1
+          }
+        }
+      ]
+    },
     group:'post.id',
     order:[[model.Sequelize.literal('cnt'),'desc'],[model.Sequelize.literal('post.id'),'desc']],
     limit:3
