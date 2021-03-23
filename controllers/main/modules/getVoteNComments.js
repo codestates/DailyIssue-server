@@ -18,9 +18,6 @@ module.exports=(issueId)=>{
     include:[{
       model:model.comment,
       attributes:['id','content','createdAt'],
-      where:{
-        'postId':issueId
-      },
       include:[{
         model:model.user,
         attributes:['nickname'],
@@ -36,6 +33,9 @@ module.exports=(issueId)=>{
       required:false,
       right:true,
     }],
+    where:{
+      '$comment.postId$':issueId
+    },
     raw:true,
     group:'comment.id',
   });
