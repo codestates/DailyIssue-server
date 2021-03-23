@@ -13,7 +13,7 @@ module.exports=(issueId)=>{
   });
   const comments=model.like.findAll({
     attributes:[
-      [model.sequelize.fn('COUNT','*'), 'like']
+      [model.sequelize.fn('COUNT',model.Sequelize.col('commentId')), 'like']
     ],
     include:[{
       model:model.comment,
