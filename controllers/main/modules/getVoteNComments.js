@@ -37,7 +37,7 @@ module.exports=(issueId)=>{
       right:true,
     }],
     raw:true,
-    group:'commentId',
+    group:'comment.id',
   });
 
   return {
