@@ -12,7 +12,7 @@ module.exports=function(req,res,next){
     if(err){
       res.status(400).send('Invalid authorization');
     }
-    await model.comment.create({userId:data.id,postId:req.body.postId,content:req.body.text,createdAt:new Date()});
+    await model.comment.create({userId:data.id,postId:req.body.postId,content:req.body.text});
     const userVoted=await model.vote.findOne({
       where:{
         postId:postId,
@@ -27,6 +27,7 @@ module.exports=function(req,res,next){
       agree:vote.filter(x=>x.vote).reduce((acc,x)=>x.dataValues.count,0),
       disagree:vote.filter(x=>!x.vote).reduce((acc,x)=>x.dataValues.count,0),
       comments:comments.map(x=>{
+        console.log(x.createdAt);
         return {
           commentId:x["comment.id"],
           text:x["comment.content"],
