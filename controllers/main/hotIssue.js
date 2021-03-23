@@ -4,7 +4,7 @@ const jwt=require('jsonwebtoken');
 module.exports=async function(req,res,date){
   if(!date){
     const tmp=new Date();
-    date=`${tmp.getFullYear()}-${tmp.getMonth()}-${tmp.getDate()}`;
+    date=`${tmp.getFullYear()}-${(tmp.getMonth()+1)}-${tmp.getDate()}`;
   }
   else{
     try{
