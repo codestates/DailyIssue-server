@@ -36,8 +36,8 @@ module.exports={
       if(err){
         res.send(400).send('Invalid authorization');
       }
-      await model.post.create({userId:data.id,title:req.body.title,createdAt:new Date()});
-      res.send("success!");
+      const newIssue=await model.post.create({userId:data.id,title:req.body.title,createdAt:new Date()});
+      sendIssue(req,res,newIssue);
     });
   }
 }
