@@ -17,6 +17,7 @@ module.exports=async function(req,res,date){
     }
   }
   const nextDateObj=new Date(dateObj.getTime()+(24*60*60*1000));
+  console.log(dateObj, nextDateObj);
   const smallIssues=await model.vote.findAll({
     attributes:[
       [model.Sequelize.fn('COUNT','*'),'cnt']
@@ -31,11 +32,12 @@ module.exports=async function(req,res,date){
           [model.Sequelize.Op.in]:[dateObj,nextDateObj]
         }
       },
-      required:true,
+      required:false,
+      right:true,
       attributes:['title','id',"userId"]
     },
     group:'post.id',
-    order:[[model.Sequelize.literal('cnt'),'desc']],
+    order:[[model.Sequelize.literal('cnt'),'desc'],[model.Sequelize.literal('post.id'),'desc']],
     limit:3
   });
   res.send({
