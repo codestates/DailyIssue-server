@@ -12,7 +12,7 @@ module.exports=function(req,res,next){
     if(err){
       res.status(400).send('Invalid authorization');
     }
-    await model.comment.create({userId:data.id,postId:req.body.postId,vote:req.body.text,createdAt:new Date()});
+    await model.comment.create({userId:data.id,postId:req.body.postId,content:req.body.text,createdAt:new Date()});
     const userVoted=await model.vote.findOne({
       where:{
         postId:postId,
