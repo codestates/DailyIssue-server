@@ -22,16 +22,8 @@ module.exports = async function(req, res) {
                         username: decoded.username,
                     }
                 })
-                const isVerify = await passwordHash.verify(req.body.password, userData.dataValues.hashedpw);
-                if (isVerify) {
-                    // 현재 비밀번호가 일치한다면,
-                    await user.update({nickname: req.body.nicknameFix || userData.dataValues.nickname}, {where: {hashedpw: userData.dataValues.hashedpw}});
-    
-                    res.status(200).send('닉네임 변경이 완료되었습니다.');
-                }
-                else {
-                    res.status(400).send('현재 비밀번호가 일치하지 않습니다.');
-                }
+                await user.update({nickname: req.body.nicknameFix}, {where: {id: userData.dataValues.id}});
+                res.status(200).json({message:'닉네임 변경이 완료되었습니다.'});
             }
         })
     }
