@@ -27,7 +27,7 @@ module.exports = async function(req, res) {
         })
         // 중복 존재할 때,
         if (checkEmail || checkUserName || checkNickName) {
-            res.status(409).send('이미 가입한 아이디/닉네임 회원입니다.');
+            res.status(409).json({message:'이미 가입한 아이디/닉네임 회원입니다.'});
         }
         else {
             let hashedPassword = await passwordHash.generate(req.body.password);
