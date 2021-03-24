@@ -22,7 +22,6 @@ module.exports = async function(req, res) {
                         username: decoded.username,
                     }
                 })
-                const isVerify = await passwordHash.verify(req.body.password, userData.dataValues.hashedpw);
                 if (isVerify) {
                     // 현재 비밀번호가 일치한다면,
                     await user.update({nickname: req.body.nicknameFix || userData.dataValues.nickname}, {where: {hashedpw: userData.dataValues.hashedpw}});
