@@ -13,9 +13,10 @@ module.exports = async function(req, res) {
             // hashedpw: hashedPassword,
         }
     })
-
-    console.log(`🚀hashedpw: ${checkData.dataValues.hashedpw}`);
-    console.log(`🚀password: ${req.body.password}`)
+    if(!checkData){
+        res.status(400).send('로그인 정보가 잘못됐습니다.');
+        return;
+    }
     const isVerify = await passwordHash.verify(req.body.password, checkData.dataValues.hashedpw)
     if (checkData && isVerify) {
         // asign token
