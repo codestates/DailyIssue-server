@@ -9,7 +9,7 @@ module.exports={
       res.status(404).send("No Such Small Issue");
       return;
     }
-    sendIssue(req,res,smallIssue);
+    sendIssue(req,res,smallIssue,true);
   },
   async get(req,res){
     let date=req.query.date;
@@ -43,7 +43,7 @@ module.exports={
       return;
     }
     const smallIssue=smallIssues[Math.floor(Math.random()*(smallIssues.length))];
-    sendIssue(req,res,smallIssue);
+    sendIssue(req,res,smallIssue,!(!req.query.date));
   },
   post(req,res,next){
     const auth=req.headers['authorization'];
