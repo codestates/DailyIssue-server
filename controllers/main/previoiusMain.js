@@ -1,47 +1,30 @@
 const model=require("../../models");
+const sendIssue = require("./modules/sendIssue");
 
-module.exports=async function(req,res,next){
-  console.log(req.params.date);
-  let hotIssue, hotIssueId;
-  if(req.params.date.match(/dddd-dd-dd/)){ //날짜인지확인하는부분 자세하게구현할필요있음
-    hotIssue=await model.post.findOne({
-      where:{
-        createdAt:req.parms.date
-      }
-    });
+module.exports=async function(req,res){
+  let dateObj;
+  try{
+    dateObj=new Date(req.params.date);
   }
-  if(hotIssue){
-    hotIssueId=hotIssue.postId;
+  catch(e){
+    res.status(400).send(`${req.params.date}is not date`);
+    return;
   }
-  else{
-    hotIssueId=1;
-    hotIssue=await model.post.findByPk(1);
-  }
-  const vote=await model.vote.findAll({
-    attributes:[
-      "vote",
-      [model.sequelize.fn('COUNT','*'), 'count']
-    ],
+  const nextDateObj=new Date(dateObj.getTime()+(24*60*60*1000));
+  const dailyIssue=await model.post.findOne({
     where:{
-      postId:hotIssueId,
-    },
-    group:'vote'  
+      createdAt:{
+        [model.Sequelize.Op.in]:[dateObj,nextDateObj]
+      },
+      userId:1
+    }
   });
-  const comments=await model.comment.findAll({
-    where:{
-      postId:hotIssueId
-    },
-    include:{
-      model:model.user,
-      attributes:['nickname']
-    },
-    raw:true
-  });
-  res.send({
-    hotIssue,
-    voted:false,
-    agree:vote.filter(x=>x.vote)[0].dataValues.count,
-    disgree:vote.filter(x=>!x.vote)[0].dataValues.count,
-    comments
-  });
+  if(dailyIssue){
+    sendIssue(req,res,dailyIssue,true);
+    return;
+  }
+  res.status(404).send('no issue');
+  return;
+  //const defaultDailyIssue=await model.post.findByPk(1);
+  //sendIssue(req,res,defaultDailyIssue);
 }

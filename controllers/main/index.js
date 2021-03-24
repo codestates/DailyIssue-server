@@ -5,15 +5,15 @@ const comment=require("./comment.js");
 const totalLike=require("./totalLike.js");
 const postLike=require("./postLike");
 const small=require("./small");
-
-let hotIssueId=1;
+const hotIssue=require("./hotIssue");
 
 module.exports={
-  main:(req,res)=>main(req,res,hotIssueId),
+  main:(req,res)=>main(req,res),
   previousMain,
   vote,
   comment,
   totalLike,
   postLike,
+  hotIssue,
   small
 };
