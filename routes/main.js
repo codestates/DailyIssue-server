@@ -12,6 +12,6 @@ router.get('/small/:id',controller.small.getById);
 router.post('/small',controller.small.post);
 router.get('/hotissue',(req,res)=>controller.hotIssue(req,res));
 router.get('/hotissue/:date',(req,res)=>controller.hotIssue(req,res,req.params.date));
-router.get('/:date',controller.previousMain);
+router.get('/:date',controller.main);
 
 module.exports=router;
