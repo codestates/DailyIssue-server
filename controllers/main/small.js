@@ -12,11 +12,30 @@ module.exports={
     sendIssue(req,res,smallIssue);
   },
   async get(req,res){
+    let date=req.query.date;
+    if(!date){
+      const tmp=new Date();
+      date=`${tmp.getFullYear()}-${(tmp.getMonth()+1)}-${tmp.getDate()}`;
+    }
+    else{
+      try{
+        new Date(date);
+      }
+      catch(e){
+        res.status(400).send(`${date}is not date`);
+        return;
+      }
+    }
     const smallIssues=await model.post.findAll({
       where:{
-        "userId":{
-          [model.Sequelize.Op.ne]:1
-        }
+        [model.Sequelize.Op.and]:[
+          model.Sequelize.where(model.Sequelize.fn("DATE",model.Sequelize.col('post.createdAt')),date),
+          {
+            "$post.userId$":{
+              [model.Sequelize.Op.ne]:1
+            }
+          }
+        ]
       }
     })
     if(smallIssues.length===0){
