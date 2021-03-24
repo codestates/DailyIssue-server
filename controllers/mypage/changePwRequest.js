@@ -27,7 +27,7 @@ module.exports = async function(req, res) {
                 if (isVerify) {
                     // 현재 비밀번호가 일치한다면,
                     let hashedFixPassword = await passwordHash.generate(req.body.fixPassword);
-                    await user.update({hashedpw: hashedFixPassword}, {where: {hashedpw: userData.dataValues.hashedpw}});
+                    await user.update({hashedpw: hashedFixPassword}, {where: {id: userData.dataValues.id}});
     
                     res.status(200).json({message: '비밀번호 수정이 완료되었습니다.'});
                 }
