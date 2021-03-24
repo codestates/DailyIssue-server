@@ -3,6 +3,7 @@ const router=express.Router();
 const controllers = require("../controllers/mypage");
 
 router.get('/mypage', controllers.mypageRequest);
-router.post('/changPwRequest', controllers.changePwRequest);
+router.post('/changePwRequest', controllers.changePwRequest);
+router.post('/changeNickname', controllers.changeNickname);
 
 module.exports=router;
