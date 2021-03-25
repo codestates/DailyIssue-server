@@ -22,8 +22,8 @@ module.exports = async function(req, res) {
                         username: decoded.username,
                     }
                 })
-                await user.update({nickname: req.body.nicknameFix}, {where: {id: userData.dataValues.id}});
-                res.status(200).send('닉네임 변경이 완료되었습니다.');
+		await user.update({nickname: req.body.nicknameFix}, {where: {id: userData.dataValues.id}});
+                res.status(200).json({message:'닉네임 변경이 완료되었습니다.'});
             }
         })
     }

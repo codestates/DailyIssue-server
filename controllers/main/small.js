@@ -9,14 +9,33 @@ module.exports={
       res.status(404).send("No Such Small Issue");
       return;
     }
-    sendIssue(req,res,smallIssue);
+    sendIssue(req,res,smallIssue,true);
   },
   async get(req,res){
+    let date=req.query.date;
+    if(!date){
+      const tmp=new Date();
+      date=`${tmp.getFullYear()}-${(tmp.getMonth()+1)}-${tmp.getDate()}`;
+    }
+    else{
+      try{
+        new Date(date);
+      }
+      catch(e){
+        res.status(400).send(`${date}is not date`);
+        return;
+      }
+    }
     const smallIssues=await model.post.findAll({
       where:{
-        "userId":{
-          [model.Sequelize.Op.ne]:1
-        }
+        [model.Sequelize.Op.and]:[
+          model.Sequelize.where(model.Sequelize.fn("DATE",model.Sequelize.col('post.createdAt')),date),
+          {
+            "$post.userId$":{
+              [model.Sequelize.Op.ne]:1
+            }
+          }
+        ]
       }
     })
     if(smallIssues.length===0){
@@ -24,7 +43,7 @@ module.exports={
       return;
     }
     const smallIssue=smallIssues[Math.floor(Math.random()*(smallIssues.length))];
-    sendIssue(req,res,smallIssue);
+    sendIssue(req,res,smallIssue,!(!req.query.date));
   },
   post(req,res,next){
     const auth=req.headers['authorization'];
