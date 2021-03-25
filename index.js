@@ -11,14 +11,14 @@ const cors=require('cors');
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
-    origin: ["localhost:3000", "www.dailyissue.net:3000"],
+    origin:"www.dailyissue.net",
     method:['GET','POST','OPTION'],
     credentials:true
 }));
 app.use(cookieParser());
 
 app.options(cors({
-    origin: ["localhost:3000", "www.dailyissue.net:3000"],
+    origin: "www.dailyissue.net",
     method:['GET','POST','OPTION'],
     credentials:true
 }));
