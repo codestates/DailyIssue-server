@@ -40,7 +40,6 @@ module.exports=(issueId)=>{
     group:'comment.id',
     order:[[model.Sequelize.literal('comment.id'),"ASC"]]
   });
-
   return {
     vote,
     comments

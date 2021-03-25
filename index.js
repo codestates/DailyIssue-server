@@ -11,14 +11,14 @@ const cors=require('cors');
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
-    origin:"www.dailyissue.net",
+	origin:"https://www.dailyissue.net",
     method:['GET','POST','OPTION'],
     credentials:true
 }));
 app.use(cookieParser());
 
 app.options(cors({
-    origin: "www.dailyissue.net",
+	origin: "https://www.dailyissue.net",
     method:['GET','POST','OPTION'],
     credentials:true
 }));
@@ -26,6 +26,7 @@ app.use('/main',mainRouter);
 app.use('/mypage',mypageRouter);
 app.use('/report',reportRouter);
 app.use('/',authRouter);
+app.get('/',(req,res)=>{res.send('success!')});
 
 app.listen(port,()=>{
     console.log(`server on ${port}`);

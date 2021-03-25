@@ -7,6 +7,7 @@ const passwordHash = require('password-hash');
 module.exports = async function(req, res) {
     // input 정보와 일치하는 데이터가 db에 존재하면 로그인을 통과 시킵니다.
         // need verify method??
+console.log('asdfasdf');
     const checkData = await user.findOne({
         where: {
             username: req.body.username,
