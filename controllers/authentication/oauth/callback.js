@@ -4,6 +4,7 @@ const clientID = process.env.GOOGLE_CLIENT_ID;
 const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const { default: axios } = require('axios');
 const { user } = require('../../../models');
+const jwt = require('jsonwebtoken');
 
 module.exports = async function(req, res) {
     axios
