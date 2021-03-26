@@ -12,7 +12,7 @@ module.exports = async function(req, res) {
             code: req.query.code,
             client_id: clientID,
             client_secret: clientSecret,
-            redirect_uri: 'https://app.dailyissue.net/callback',
+            redirect_uri: 'https://www.dailyissue.net',
             grant_type: "authorization_code",
         })
         .then(async (rs) => {
